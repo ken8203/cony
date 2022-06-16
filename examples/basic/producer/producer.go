@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
+	"time"
 
 	"github.com/ken8203/cony"
-	"github.com/streadway/amqp"
-	"time"
+	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 var url = flag.String("url", "amqp://guest:guest@localhost/", "amqp url")

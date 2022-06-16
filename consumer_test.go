@@ -3,10 +3,11 @@ package cony
 import (
 	"bytes"
 	"errors"
+	"sync"
 	"testing"
 	"time"
 
-	"github.com/streadway/amqp"
+	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 func TestAutoAck(t *testing.T) {
@@ -55,14 +56,17 @@ func TestConsumer_Cancel_willNotBlock(t *testing.T) {
 	var ok bool
 	c := newTestConsumer()
 
+	var wg sync.WaitGroup
+	wg.Add(1)
 	go func() {
 		c.Cancel()
 		c.Cancel()
 		c.Cancel()
 		ok = true
+		wg.Done()
 	}()
+	wg.Wait()
 
-	time.Sleep(1 * time.Microsecond) // let goroutine to work
 	if !ok {
 		t.Error("shold not block")
 	}
