@@ -1,6 +1,6 @@
 # Cony
 
-High-level AMQP 0.9.1 client library. It's wrapper around low-level [streadway/amqp](https://github.com/streadway/amqp/) library.
+High-level AMQP 0.9.1 client library. It's wrapper around low-level [rabbitmq/amqp091-go](https://github.com/rabbitmq/amqp091-go) library.
 
 # Goals
 
