@@ -211,7 +211,7 @@ func (c *Client) reportErr(err error) bool {
 }
 
 func (c *Client) channel() (*amqp.Channel, error) {
-	conn, err := c.connection()
+	conn, err := c.Connection()
 	if err != nil {
 		return nil, err
 	}
@@ -219,7 +219,7 @@ func (c *Client) channel() (*amqp.Channel, error) {
 	return conn.Channel()
 }
 
-func (c *Client) connection() (*amqp.Connection, error) {
+func (c *Client) Connection() (*amqp.Connection, error) {
 	conn, _ := c.conn.Load().(*amqp.Connection)
 	if conn == nil {
 		return nil, ErrNoConnection
