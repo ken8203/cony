@@ -1,0 +1,34 @@
+version: "3.4"
+
+services:
+  amqp:
+    image: rabbitmq:3.7-management-alpine
+    command: bash -c "rabbitmq-plugins enable --offline rabbitmq_random_exchange && /usr/local/bin/docker-entrypoint.sh rabbitmq-server"
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  test:
+    image: golang:1.18
+    working_dir: /workspace
+    command: go test -v ./... --timeout 20s
+    environment:
+      AMQP_URL: amqp://amqp:5672
+      GROUP_ID:
+      USER_ID:
+      GROUP_NAME:
+      USER_NAME:
+    volumes:
+      - .:/workspace
+      - ${GOPATH:-~/go}/pkg/mod:/go/pkg/mod:cached
+      - gocache:/go/.cache
+
+  test-deps:
+    image: dadarek/wait-for-dependencies
+    command:
+      - amqp:5672
+    depends_on:
+      - amqp
+
+volumes:
+  gocache:
