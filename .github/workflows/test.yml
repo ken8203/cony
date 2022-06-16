@@ -1,0 +1,29 @@
+name: Tests
+on: push
+concurrency:
+  group: "${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}"
+  cancel-in-progress: true
+jobs:
+  test:
+    name: Go ${{ matrix.go }}
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        go: ["1.16", "1.17", "1.18"]
+    services:
+      rabbitmq:
+        image: rabbitmq:3.10-alpine
+        ports:
+          - 5672:5672
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go }}
+          cache: true
+      - name: Run test
+        env:
+          AMQP_URL: amqp://amqp:5672
+        run: go test -v ./... --timeout 20s
