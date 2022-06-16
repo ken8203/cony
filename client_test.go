@@ -122,13 +122,13 @@ func TestClient_channel(t *testing.T) {}
 func TestClient_connection(t *testing.T) {
 	c := NewClient()
 
-	if _, err := c.connection(); err != ErrNoConnection {
+	if _, err := c.Connection(); err != ErrNoConnection {
 		t.Error("error should be", ErrNoConnection)
 	}
 
 	c.conn.Store(&amqp.Connection{})
 
-	con, err := c.connection()
+	con, err := c.Connection()
 	if con == nil {
 		t.Error("should return existing connection")
 	}
