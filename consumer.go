@@ -51,6 +51,10 @@ func (c *Consumer) Cancel() {
 	}
 }
 
+func (c *Consumer) Tag() string {
+	return c.tag
+}
+
 func (c *Consumer) reportErr(err error) bool {
 	if err != nil {
 		select {

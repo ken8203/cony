@@ -52,6 +52,17 @@ func (c *Client) Declare(d []Declaration) {
 	}
 }
 
+func (c *Client) GetConsumer(tag string) *Consumer {
+	c.l.Lock()
+	defer c.l.Unlock()
+	for consumer := range c.consumers {
+		if consumer.tag == tag {
+			return consumer
+		}
+	}
+	return nil
+}
+
 // Consume used to declare consumers
 func (c *Client) Consume(cons *Consumer) {
 	c.l.Lock()
